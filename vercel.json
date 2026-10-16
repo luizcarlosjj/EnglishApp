@@ -1,6 +1,1 @@
-{
-  "buildCommand": null,
-  "outputDirectory": "public",
-  "installCommand": "npm install",
-  "framework": null
-}
+{}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -236,13 +236,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <!-- ===== LOGIN ===== -->
 <div id="screen-login" class="screen active">
   <div class="login-logo">💬</div>
-  <div class="login-title">English Chat Simulator</div>
-  <div class="login-sub">Sign in to start practising English.</div>
+  <div class="login-title">Simulador de Inglês</div>
+  <div class="login-sub">Entre para praticar inglês em conversas reais.</div>
   <div class="login-form">
     <input id="login-email" class="login-input" type="email" placeholder="Email" autocomplete="email">
-    <input id="login-password" class="login-input" type="password" placeholder="Password" autocomplete="current-password"
+    <input id="login-password" class="login-input" type="password" placeholder="Senha" autocomplete="current-password"
       onkeydown="if(event.key==='Enter')signIn()">
-    <button class="btn-enter" onclick="signIn()">Sign in →</button>
+    <button class="btn-enter" onclick="signIn()">Entrar →</button>
   </div>
   <div id="login-error" style="color:#f44336;font-size:13px;display:none"></div>
 </div>
@@ -251,14 +251,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div id="screen-scenarios" class="screen">
   <div class="scenarios-header">
     <div class="scenarios-header-top">
-      <h1>Choose a scenario</h1>
-      <button class="btn-signout" onclick="signOut()">Sign out</button>
+      <h1>Escolha um cenário</h1>
+      <button class="btn-signout" onclick="signOut()">Sair</button>
     </div>
     <div class="cat-tabs">
-      <button class="cat-tab active" onclick="filterScenarios('all', this)">All</button>
-      <button class="cat-tab" onclick="filterScenarios('work', this)">💼 Work</button>
-      <button class="cat-tab" onclick="filterScenarios('travel', this)">✈️ Travel</button>
-      <button class="cat-tab" onclick="filterScenarios('day', this)">☀️ Day to Day</button>
+      <button class="cat-tab active" onclick="filterScenarios('all', this)">Todos</button>
+      <button class="cat-tab" onclick="filterScenarios('work', this)">💼 Trabalho</button>
+      <button class="cat-tab" onclick="filterScenarios('travel', this)">✈️ Viagem</button>
+      <button class="cat-tab" onclick="filterScenarios('day', this)">☀️ Dia a Dia</button>
       <button class="cat-tab" onclick="filterScenarios('social', this)">🌍 Social</button>
     </div>
   </div>
@@ -266,11 +266,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   <nav class="bottom-nav">
     <button class="active" onclick="showScreen('scenarios');renderScenarios()">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
-      Scenarios
+      Cenários
     </button>
     <button onclick="loadProgress()">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-      Progress
+      Progresso
     </button>
   </nav>
 </div>
@@ -290,14 +290,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <button class="chat-action-btn" onclick="toggleEngagement()" title="Toggle engagement bar">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
       </button>
-      <button class="btn-finish chat-action-btn" onclick="triggerEvaluate()" title="Finish &amp; Evaluate" style="font-size:11px;padding:6px 10px;background:rgba(255,255,255,.2);border-radius:6px;width:auto">
-        ✓ Finish
+      <button class="btn-finish chat-action-btn" onclick="triggerEvaluate()" title="Terminar e Avaliar" style="font-size:11px;padding:6px 10px;background:rgba(255,255,255,.2);border-radius:6px;width:auto">
+        ✓ Terminar
       </button>
     </div>
   </div>
 
   <div class="engagement-wrap" id="engagement-wrap" style="display:none">
-    <span class="engagement-label">Flow</span>
+    <span class="engagement-label">Fluência</span>
     <div class="engagement-bar"><div class="engagement-fill" id="engagement-fill"></div></div>
     <span class="engagement-value" id="engagement-value">70%</span>
   </div>
@@ -311,14 +311,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
 
   <div id="ended-banner" style="display:none" class="ended-banner">
-    Conversation ended.
-    <br><button class="btn-evaluate" onclick="triggerEvaluate()">See my evaluation →</button>
+    Conversa encerrada.
+    <br><button class="btn-evaluate" onclick="triggerEvaluate()">Ver minha avaliação →</button>
   </div>
 
   <div class="chat-input-area" id="chat-input-area">
     <button class="btn-help" onclick="openHelpModal()" title="How do I say…?">💡</button>
     <div class="chat-input-wrap">
-      <textarea id="chat-input" class="chat-input" placeholder="Type a message…" rows="1"
+      <textarea id="chat-input" class="chat-input" placeholder="Digite uma mensagem…" rows="1"
         onkeydown="handleInputKey(event)"
         oninput="autoResize(this)"></textarea>
     </div>
@@ -334,12 +334,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button class="eval-back" onclick="showScreen('scenarios');renderScenarios()">
       <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
     </button>
-    <h1>Your Evaluation</h1>
+    <h1>Sua Avaliação</h1>
   </div>
   <div class="eval-body">
     <div class="eval-loading" id="eval-loading">
       <div class="spinner"></div>
-      <span>Analysing your conversation…</span>
+      <span>Analisando sua conversa…</span>
     </div>
     <div id="eval-content" style="display:none"></div>
   </div>
@@ -351,16 +351,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button class="eval-back" onclick="showScreen('scenarios');renderScenarios()">
       <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
     </button>
-    <h1>My Progress</h1>
+    <h1>Meu Progresso</h1>
   </div>
   <div class="progress-body">
     <div class="stats-row" id="stats-row">
-      <div class="stat-box"><div class="stat-num" id="stat-total">–</div><div class="stat-label">Conversations</div></div>
-      <div class="stat-box"><div class="stat-num" id="stat-avg">–</div><div class="stat-label">Avg. Score</div></div>
-      <div class="stat-box"><div class="stat-num" id="stat-best">–</div><div class="stat-label">Best Score</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-total">–</div><div class="stat-label">Conversas</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-avg">–</div><div class="stat-label">Média</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-best">–</div><div class="stat-label">Melhor Nota</div></div>
     </div>
     <div class="chart-wrap">
-      <h3>Score over time</h3>
+      <h3>Evolução das notas</h3>
       <svg id="score-chart" width="100%" height="100" viewBox="0 0 400 100" preserveAspectRatio="none"></svg>
     </div>
     <div id="history-list" class="history-list"></div>
@@ -370,13 +370,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <!-- ===== HELP MODAL ===== -->
 <div class="modal-overlay" id="help-modal">
   <div class="modal-box">
-    <div class="modal-title">💡 How do I say…?</div>
-    <div class="modal-sub">Type in Portuguese what you want to say. I'll give you natural English options.</div>
+    <div class="modal-title">💡 Como digo em inglês…?</div>
+    <div class="modal-sub">Digite em português o que quer dizer. Vou te dar opções naturais em inglês.</div>
     <textarea id="help-input" class="modal-input" rows="2" placeholder="Ex: quero dizer que não consigo comparecer amanhã…" oninput="autoResize(this)"></textarea>
     <div id="help-suggestions" class="modal-suggestions"></div>
     <div class="modal-btns">
-      <button class="btn-modal-ask" onclick="askHelp()">Translate →</button>
-      <button class="btn-modal-close" onclick="closeHelpModal()">Close</button>
+      <button class="btn-modal-ask" onclick="askHelp()">Traduzir →</button>
+      <button class="btn-modal-close" onclick="closeHelpModal()">Fechar</button>
     </div>
   </div>
 </div>
@@ -611,8 +611,8 @@ const state = {
 };
 
 const scoreLabels = {
-  gramatica:'Grammar', vocabulario:'Vocabulary',
-  naturalidade:'Naturalness', clareza:'Clarity', tom_adequado:'Appropriate Tone'
+  gramatica:'Gramática', vocabulario:'Vocabulário',
+  naturalidade:'Naturalidade', clareza:'Clareza', tom_adequado:'Tom Adequado'
 };
 
 // =====================================================================
@@ -665,6 +665,7 @@ async function signOut() {
 function renderScenarios(filter = 'all') {
   const list = filter === 'all' ? SCENARIOS : SCENARIOS.filter(s => s.category === filter);
   const grid = document.getElementById('scenarios-grid');
+  const levelPT = { beginner:'Iniciante', intermediate:'Intermediário', challenging:'Desafiador' };
   grid.innerHTML = list.map(s => `
     <div class="scenario-card" onclick="openBrief('${s.code}')">
       <div class="scenario-emoji">${s.emoji}</div>
@@ -672,7 +673,7 @@ function renderScenarios(filter = 'all') {
         <div class="scenario-title">${s.title}</div>
         <div class="scenario-brief">${s.brief}</div>
         <div class="scenario-meta">
-          <span class="badge badge-${s.level}">${s.level}</span>
+          <span class="badge badge-${s.level}">${levelPT[s.level]||s.level}</span>
           <span class="cefr">${s.cefr}</span>
         </div>
       </div>
@@ -703,15 +704,15 @@ function openBrief(code) {
       <div class="modal-title">${s.title}</div>
       <div class="modal-sub" style="margin-bottom:10px">${s.brief}</div>
       <div style="background:var(--wa-dark3);border-radius:8px;padding:10px 12px;font-size:13px;color:#ccc;margin-bottom:12px">
-        <strong style="color:var(--wa-green)">Your goal:</strong> ${s.goal}
+        <strong style="color:var(--wa-green)">Seu objetivo:</strong> ${s.goal}
       </div>
       <div style="display:flex;gap:8px;margin-bottom:6px">
-        <span class="badge badge-${s.level}">${s.level}</span>
+        <span class="badge badge-${s.level}">${{beginner:'Iniciante',intermediate:'Intermediário',challenging:'Desafiador'}[s.level]||s.level}</span>
         <span class="cefr" style="line-height:1.8">${s.cefr} · ${s.persona.name} (${s.persona.origin})</span>
       </div>
       <div class="modal-btns" style="margin-top:16px">
-        <button class="btn-modal-ask" onclick="startScenario('${s.code}');document.getElementById('brief-modal').remove()">Start conversation →</button>
-        <button class="btn-modal-close" onclick="document.getElementById('brief-modal').remove()">Cancel</button>
+        <button class="btn-modal-ask" onclick="startScenario('${s.code}');document.getElementById('brief-modal').remove()">Iniciar conversa →</button>
+        <button class="btn-modal-close" onclick="document.getElementById('brief-modal').remove()">Cancelar</button>
       </div>
     </div>`;
   document.body.appendChild(el);
@@ -733,7 +734,7 @@ function startScenario(code) {
   document.getElementById('chat-name').textContent = s.persona.name;
   document.getElementById('chat-avatar').textContent = s.emoji;
   document.getElementById('chat-status').textContent = 'online';
-  document.getElementById('chat-date').textContent = new Date().toLocaleDateString('en', {weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('chat-date').textContent = new Date().toLocaleDateString('pt-BR', {weekday:'long',month:'long',day:'numeric'});
   document.getElementById('messages').innerHTML = `<div class="msg-date"><span id="chat-date">${new Date().toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric'})}</span></div>`;
   document.getElementById('typing').style.display = 'none';
   document.getElementById('ended-banner').style.display = 'none';
@@ -746,7 +747,7 @@ function startScenario(code) {
   // Show brief banner in chat
   const banner = document.createElement('div');
   banner.className = 'brief-banner';
-  banner.innerHTML = `<strong>📋 ${s.title}</strong>${s.brief}<div class="goal">🎯 Goal: ${s.goal}</div>`;
+  banner.innerHTML = `<strong>📋 ${s.title}</strong>${s.brief}<div class="goal">🎯 Objetivo: ${s.goal}</div>`;
   document.getElementById('messages').appendChild(banner);
 
   showScreen('chat');
@@ -804,7 +805,7 @@ async function processPersonaReply() {
     const data = await callAPI('persona', apiMessages);
     rawText = data.content;
   } catch(e) {
-    addSystemNote('⚠️ Connection error. Check your server and try again.');
+    addSystemNote('⚠️ Erro de conexão. Verifique sua internet e tente novamente.');
     document.getElementById('chat-input').disabled = false;
     document.getElementById('send-btn').disabled = false;
     return;
@@ -870,7 +871,7 @@ function addSystemNote(text) {
 function showTyping() {
   const t = document.getElementById('typing');
   t.style.display = 'flex';
-  document.getElementById('chat-status').textContent = 'typing…';
+  document.getElementById('chat-status').textContent = 'digitando…';
   scrollBottom();
 }
 function hideTyping() {
@@ -882,12 +883,12 @@ function endConversation() {
   state.ended = true;
   document.getElementById('chat-input-area').style.display = 'none';
   document.getElementById('ended-banner').style.display = 'block';
-  document.getElementById('chat-status').textContent = 'conversation ended';
+  document.getElementById('chat-status').textContent = 'conversa encerrada';
 }
 
 function confirmBackToScenarios() {
   if (state.messages.length > 0 && !state.ended) {
-    if (!confirm('Leave this conversation? Your progress will be lost.')) return;
+    if (!confirm('Sair desta conversa? Seu progresso será perdido.')) return;
   }
   showScreen('scenarios');
   renderScenarios();
@@ -936,7 +937,7 @@ async function askHelp() {
   if (!input) return;
 
   const sugBox = document.getElementById('help-suggestions');
-  sugBox.innerHTML = '<div style="color:var(--wa-sub);font-size:13px;padding:8px 0">Getting suggestions…</div>';
+  sugBox.innerHTML = '<div style="color:var(--wa-sub);font-size:13px;padding:8px 0">Buscando sugestões…</div>';
 
   const prompt = `You are an English language tutor. The student wants to say the following in a WhatsApp conversation:
 "${input}"
@@ -956,7 +957,7 @@ Give exactly 3 natural English options for saying this, from most casual to most
       </div>`).join('');
     state.helpCount++;
   } catch(e) {
-    sugBox.innerHTML = '<div style="color:#f44336;font-size:13px">Error getting suggestions. Try again.</div>';
+    sugBox.innerHTML = '<div style="color:#f44336;font-size:13px">Erro ao buscar sugestões. Tente novamente.</div>';
   }
 }
 
@@ -972,7 +973,7 @@ function useHelp(text) {
 // =====================================================================
 function triggerEvaluate() {
   if (state.messages.filter(m => m.role === 'user').length === 0) {
-    alert("Send at least one message before evaluating.");
+    alert("Envie pelo menos uma mensagem antes de avaliar.");
     return;
   }
   endConversation();
@@ -998,7 +999,7 @@ async function runEvaluation() {
     renderEvaluation(evaluation);
   } catch(e) {
     document.getElementById('eval-loading').innerHTML =
-      `<div style="color:#f44336;text-align:center">Error generating evaluation.<br><small>${e.message}</small><br><br><button class="btn-action secondary" onclick="runEvaluation()">Retry</button></div>`;
+      `<div style="color:#f44336;text-align:center">Erro ao gerar avaliação.<br><small>${e.message}</small><br><br><button class="btn-action secondary" onclick="runEvaluation()">Tentar novamente</button></div>`;
   }
 }
 
@@ -1041,8 +1042,8 @@ function renderEvaluation(ev) {
   content.style.display = 'block';
 
   const goalHTML = ev.objetivo_alcancado
-    ? '<div class="goal-banner success">🎯 Goal achieved!</div>'
-    : '<div class="goal-banner fail">😅 Goal not fully achieved — try this scenario again!</div>';
+    ? '<div class="goal-banner success">🎯 Objetivo alcançado!</div>'
+    : '<div class="goal-banner fail">😅 Objetivo não totalmente alcançado — tente este cenário novamente!</div>';
 
   const scoresHTML = Object.entries(ev.notas).map(([k,v]) => `
     <div class="score-item">
@@ -1058,15 +1059,15 @@ function renderEvaluation(ev) {
         <div class="correction-fixed">✅ "${esc(c.corrigido)}"</div>
         <div class="correction-exp">${esc(c.explicacao)}<span class="correction-type">${c.tipo}</span></div>
       </div>`).join('')
-    : '<p style="color:var(--wa-sub);font-size:14px">No significant errors found!</p>';
+    : '<p style="color:var(--wa-sub);font-size:14px">Nenhum erro significativo encontrado!</p>';
 
   const naturalHTML = (ev.jeito_mais_natural||[]).length
     ? ev.jeito_mais_natural.map(j => `
       <div class="natural-item">
-        <div class="natural-orig">You wrote: <em>"${esc(j.original)}"</em></div>
-        <div class="natural-native">Native would say: "${esc(j.nativo_diria)}"</div>
+        <div class="natural-orig">Você escreveu: <em>"${esc(j.original)}"</em></div>
+        <div class="natural-native">Um nativo diria: "${esc(j.nativo_diria)}"</div>
       </div>`).join('')
-    : '<p style="color:var(--wa-sub);font-size:14px">Your phrasing was already natural!</p>';
+    : '<p style="color:var(--wa-sub);font-size:14px">Sua forma de falar já estava natural!</p>';
 
   const idealHTML = (ev.conversa_ideal||'').split('|||').map(m => m.trim()).filter(Boolean)
     .map(m => `<div class="ideal-msg">${esc(m)}</div>`).join('');
@@ -1074,43 +1075,43 @@ function renderEvaluation(ev) {
   content.innerHTML = `
     ${goalHTML}
     <div class="eval-section">
-      <h2>Overall Score</h2>
+      <h2>Nota Geral</h2>
       <div class="overall-score">${ev.nota_geral}<span style="font-size:20px;color:var(--wa-sub)">/100</span></div>
-      <div class="level-badge">Estimated level: <strong>${ev.nivel_estimado}</strong></div>
+      <div class="level-badge">Nível estimado: <strong>${ev.nivel_estimado}</strong></div>
       <div class="eval-summary">${ev.resumo}</div>
     </div>
     <div class="eval-section">
-      <h2>Scores by Criterion</h2>
+      <h2>Notas por Critério</h2>
       <div class="scores-grid">${scoresHTML}</div>
     </div>
     <div class="eval-section">
-      <h2>Corrections</h2>
+      <h2>Correções</h2>
       ${correctionsHTML}
     </div>
     <div class="eval-section">
-      <h2>More Natural Phrasing</h2>
+      <h2>Como Dizer de Forma Mais Natural</h2>
       ${naturalHTML}
     </div>
     <div class="eval-section">
-      <h2>Vocabulary</h2>
+      <h2>Vocabulário</h2>
       <div class="vocab-grid">
-        <div><h3>Used ✅</h3><div class="vocab-tags">${(ev.vocab_usado||[]).map(w=>`<span class="vtag used">${w}</span>`).join('')||'<span style="color:var(--wa-sub);font-size:13px">none detected</span>'}</div></div>
-        <div><h3>Could have used 💡</h3><div class="vocab-tags">${(ev.vocab_sugerido||[]).map(w=>`<span class="vtag suggest">${w}</span>`).join('')||'<span style="color:var(--wa-sub);font-size:13px">—</span>'}</div></div>
+        <div><h3>Usadas ✅</h3><div class="vocab-tags">${(ev.vocab_usado||[]).map(w=>`<span class="vtag used">${w}</span>`).join('')||'<span style="color:var(--wa-sub);font-size:13px">nenhuma</span>'}</div></div>
+        <div><h3>Podia ter usado 💡</h3><div class="vocab-tags">${(ev.vocab_sugerido||[]).map(w=>`<span class="vtag suggest">${w}</span>`).join('')||'<span style="color:var(--wa-sub);font-size:13px">—</span>'}</div></div>
       </div>
     </div>
     <div class="eval-section">
-      <h2>Strong Points</h2>
+      <h2>Pontos Fortes</h2>
       <ul class="strengths-list">${(ev.pontos_fortes||[]).map(p=>`<li>${p}</li>`).join('')}</ul>
-      <h2 style="margin-top:14px">Areas to Improve</h2>
+      <h2 style="margin-top:14px">Pontos a Melhorar</h2>
       <ul class="improvements-list">${(ev.melhorias||[]).map(m=>`<li>${m}</li>`).join('')}</ul>
     </div>
     <div class="eval-section">
-      <h2>How a Fluent Speaker Would Do It</h2>
+      <h2>Como um Nativo Diria</h2>
       <div class="ideal-chat">${idealHTML||'<p style="color:var(--wa-sub);font-size:13px">—</p>'}</div>
     </div>
     <div class="eval-actions">
-      <button class="btn-action primary" onclick="showScreen('scenarios');renderScenarios()">Try Another Scenario</button>
-      <button class="btn-action secondary" onclick="loadProgress()">My Progress</button>
+      <button class="btn-action primary" onclick="showScreen('scenarios');renderScenarios()">Tentar outro cenário</button>
+      <button class="btn-action secondary" onclick="loadProgress()">Meu Progresso</button>
     </div>`;
 }
 
@@ -1119,14 +1120,14 @@ function renderEvaluation(ev) {
 // =====================================================================
 async function loadProgress() {
   showScreen('progress');
-  document.getElementById('history-list').innerHTML = '<div style="color:var(--wa-sub);padding:20px;text-align:center">Loading…</div>';
+  document.getElementById('history-list').innerHTML = '<div style="color:var(--wa-sub);padding:20px;text-align:center">Carregando…</div>';
   try {
     const sessions = await fetch('/api/sessions', {
       headers: { Authorization: 'Bearer ' + state.token }
     }).then(r => r.json());
     renderProgress(sessions);
   } catch(e) {
-    document.getElementById('history-list').innerHTML = '<div style="color:#f44336;padding:20px">Error loading history.</div>';
+    document.getElementById('history-list').innerHTML = '<div style="color:#f44336;padding:20px">Erro ao carregar histórico.</div>';
   }
 }
 
@@ -1134,7 +1135,7 @@ function renderProgress(sessions) {
   if (!sessions.length) {
     document.getElementById('stats-row').style.display = 'none';
     document.querySelector('.chart-wrap').style.display = 'none';
-    document.getElementById('history-list').innerHTML = `<div class="empty-state">📭<p>No conversations yet.<br>Complete a scenario to see your progress here!</p></div>`;
+    document.getElementById('history-list').innerHTML = `<div class="empty-state">📭<p>Nenhuma conversa ainda.<br>Conclua um cenário para ver seu progresso aqui!</p></div>`;
     return;
   }
 
@@ -1159,14 +1160,14 @@ function renderProgress(sessions) {
       <polyline points="${points}" fill="none" stroke="#25D366" stroke-width="2.5"/>
       ${pts.map((v,i)=>`<circle cx="${i*stepX}" cy="${h-(v/100*h)}" r="3" fill="#25D366"/>`).join('')}`;
   } else {
-    document.getElementById('score-chart').innerHTML = `<text x="50%" y="55%" text-anchor="middle" fill="#667781" font-size="13">Complete more scenarios to see your progress chart</text>`;
+    document.getElementById('score-chart').innerHTML = `<text x="50%" y="55%" text-anchor="middle" fill="#667781" font-size="13">Conclua mais cenários para ver seu gráfico de progresso</text>`;
   }
 
   // History list
   document.getElementById('history-list').innerHTML = sessions.map(s => {
     const sc = SCENARIOS.find(x => x.code === s.scenario_code);
     const score = s.evaluation?.nota_geral;
-    const date = new Date(s.created_at).toLocaleDateString('en',{month:'short',day:'numeric'});
+    const date = new Date(s.created_at).toLocaleDateString('pt-BR',{month:'short',day:'numeric'});
     const level = s.evaluation?.nivel_estimado || '';
     return `<div class="history-item">
       <div class="history-top">

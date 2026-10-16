@@ -22,12 +22,14 @@ Focado em preparação para entrevistas de emprego na área de tecnologia (níve
 
 | Camada | Tecnologia |
 |--------|-----------|
-| Frontend | HTML/CSS/JS puro, sem framework, sem build |
-| Backend | Vercel Serverless Functions (`api/`) |
+| Frontend | Next.js 15 (App Router) + TypeScript |
+| Estilização | Tailwind CSS + shadcn/ui |
+| Estado | Zustand |
+| Backend | Next.js API Routes (serverless) |
 | IA (chat/ajuda) | OpenAI `gpt-4o-mini` |
 | IA (avaliação) | OpenAI `gpt-4o` |
 | Auth + banco | Supabase (email+senha + tabela `sessions`) |
-| Dev local | Express (`server.js`) na porta 3000 |
+| Deploy | Vercel |
 
 ---
 
@@ -59,8 +61,8 @@ Preencha o `.env`:
 
 ```env
 OPENAI_API_KEY=sk-...
-SUPABASE_URL=https://<project-id>.supabase.co
-SUPABASE_ANON_KEY=eyJ...
+NEXT_PUBLIC_SUPABASE_URL=https://<project-id>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
 ```
 
@@ -95,8 +97,7 @@ No painel do Supabase: **Authentication → Users → Add user** — informe ema
 ### 5. Rodar
 
 ```bash
-node server.js
-# ou clique duas vezes em start.bat (Windows)
+npm run dev
 ```
 
 Acesse: [http://localhost:3000](http://localhost:3000)
@@ -105,7 +106,7 @@ Acesse: [http://localhost:3000](http://localhost:3000)
 
 ## Deploy (Vercel)
 
-O projeto já está configurado para Vercel (`vercel.json`). O deploy é feito via painel ou CLI.
+O projeto está configurado para Vercel com Next.js. O deploy é feito via painel ou CLI.
 
 ### Via painel (recomendado)
 
@@ -113,8 +114,8 @@ O projeto já está configurado para Vercel (`vercel.json`). O deploy é feito v
 2. Vá em **Settings → Environment Variables**
 3. Adicione as 4 variáveis abaixo para o ambiente **Production**:
    - `OPENAI_API_KEY`
-   - `SUPABASE_URL`
-   - `SUPABASE_ANON_KEY`
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `SUPABASE_SERVICE_ROLE_KEY`
 4. Vá em **Deployments → três pontos no último deploy → Redeploy**
 
@@ -136,21 +137,40 @@ No Supabase → **Authentication → URL Configuration**, adicione a URL do Verc
 
 ```
 EnglishApp/
-├── public/
-│   └── index.html          # App inteiro (frontend)
-├── api/
-│   ├── _lib/
-│   │   └── auth.js         # Supabase client + middleware de auth
-│   ├── chat.js             # POST /api/chat — chama OpenAI
-│   ├── sessions.js         # GET/POST /api/sessions — histórico
-│   └── config.js           # GET /api/config — chaves públicas do Supabase
-├── knowledge/              # Materiais de estudo (base para novos cenários)
-├── docs/
-│   └── scenarios/          # Documentação de cada cenário
-├── server.js               # Servidor Express para dev local
-├── vercel.json             # Config de deploy
-├── start.bat               # Atalho para rodar local (Windows)
-└── deploy.bat              # Atalho para primeiro deploy via CLI (Windows)
+├── app/
+│   ├── globals.css           # Estilos globais + animações
+│   ├── layout.tsx            # Layout raiz (AuthProvider)
+│   ├── page.tsx              # Redirect para /login ou /scenarios
+│   ├── login/page.tsx        # Tela de login
+│   ├── scenarios/page.tsx    # Lista de cenários
+│   ├── chat/page.tsx         # Tela de chat
+│   ├── evaluation/page.tsx   # Tela de avaliação
+│   ├── progress/page.tsx     # Histórico e progresso
+│   └── api/
+│       ├── chat/route.ts     # POST /api/chat — chama OpenAI
+│       ├── sessions/route.ts # GET/POST /api/sessions — histórico
+│       └── config/route.ts   # GET /api/config — chaves públicas
+├── components/
+│   ├── chat/                 # ChatHeader, MessageBubble, HelpModal, etc.
+│   ├── scenarios/            # ScenarioCard, BriefModal
+│   └── ui/                   # shadcn/ui (Button, Input, etc.)
+├── contexts/
+│   └── auth-context.tsx      # AuthProvider + useAuth hook
+├── hooks/
+│   └── useChat.ts            # Zustand store — estado completo do chat
+├── lib/
+│   ├── types.ts              # TypeScript interfaces
+│   ├── scenarios.ts          # Array SCENARIOS com os 10 cenários
+│   ├── prompts.ts            # buildPersonaPrompt, buildEvaluatorPrompt
+│   ├── api.ts                # callAPI, saveSession, fetchSessions
+│   ├── utils.ts              # cn, typingDelay, formatDate, etc.
+│   └── supabase/
+│       ├── client.ts         # Supabase client (browser)
+│       └── server.ts         # Supabase server + requireAuth()
+├── knowledge/                # Materiais de estudo (base para novos cenários)
+├── docs/scenarios/           # Documentação de cada cenário
+├── tailwind.config.ts        # Tema WhatsApp (cores wa-*)
+└── components.json           # Configuração shadcn/ui
 ```
 
 ---
@@ -170,14 +190,14 @@ EnglishApp/
 | DAY_03 | Dia-a-dia | Desafiador | Sports Debate with a Friend |
 | SOC_01 | Social | Intermediário | Catching Up with a Friend Abroad |
 
-Para adicionar cenários: inclua um objeto no array `SCENARIOS` em `public/index.html` e salve a documentação em `docs/scenarios/<CODIGO>.md`.
+Para adicionar cenários: inclua um objeto no array `SCENARIOS` em [lib/scenarios.ts](lib/scenarios.ts) e salve a documentação em `docs/scenarios/<CODIGO>.md`.
 
 ---
 
 ## Arquitetura de segurança
 
-- Chaves OpenAI e `SUPABASE_SERVICE_ROLE_KEY` ficam **apenas no servidor** — nunca no HTML
-- `SUPABASE_URL` e `SUPABASE_ANON_KEY` são retornadas via `/api/config` (seguro — são chaves públicas por design do Supabase)
+- `OPENAI_API_KEY` e `SUPABASE_SERVICE_ROLE_KEY` ficam **apenas no servidor** — nunca no browser
+- `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` são prefixadas com `NEXT_PUBLIC_` (seguro — são chaves públicas por design do Supabase)
 - Todo request autenticado valida o JWT via `supabase.auth.getUser(token)` usando a service role key
 - RLS no Supabase garante que cada usuário acessa apenas suas próprias sessões
 - Campos aceitos no POST `/api/sessions` são validados por whitelist (sem mass assignment)
