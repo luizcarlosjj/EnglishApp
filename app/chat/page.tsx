@@ -20,10 +20,10 @@ export default function ChatPage() {
   const {
     scenario, messages, engagement, engagementVisible, isTyping, ended,
     setEngagementVisible, inputValue, setInputValue,
-    addUserMessage, processPersonaReply, sendPersonaOpening, endConversation, incrementHelp,
+    addUserMessage, processPersonaReply, sendPersonaOpening, endConversation, incrementHelp, startScenario,
   } = useChatStore()
 
-  const { isListening, ttsEnabled, startListening, stopListening, speak, stopSpeaking, toggleTTS, supported: voiceSupported } = useVoice()
+  const { isListening, ttsEnabled, startListening, stopListening, speak, speakNow, stopSpeaking, toggleTTS, supported: voiceSupported } = useVoice()
 
   const [showHelp, setShowHelp] = useState(false)
   const [sendError, setSendError] = useState('')
@@ -71,6 +71,16 @@ export default function ChatPage() {
     }
   }
 
+  function handleRestart() {
+    if (!confirm('Reiniciar conversa? Todo o progresso será perdido.')) return
+    startScenario(scenario!)
+    spokenCountRef.current = 0
+    stopSpeaking()
+    if (scenario!.who_starts === 'persona') {
+      sendPersonaOpening(token!)
+    }
+  }
+
   function handleMicToggle() {
     if (isListening) {
       stopListening()
@@ -102,6 +112,7 @@ export default function ChatPage() {
         onFinish={() => { endConversation(); router.push('/evaluation') }}
         ttsEnabled={ttsEnabled}
         onToggleTTS={voiceSupported ? toggleTTS : undefined}
+        onRestart={handleRestart}
       />
       {engagementVisible && <EngagementBar value={engagement} />}
       <div className="flex-1 overflow-y-auto bg-wa-bg px-2.5 py-3 flex flex-col">
@@ -109,7 +120,13 @@ export default function ChatPage() {
           <span className="bg-wa-dark3/80 text-wa-sub text-xs px-2.5 py-1 rounded-lg">{formatChatDate()}</span>
         </div>
         <BriefBanner scenario={scenario} />
-        {messages.map((msg, i) => <MessageBubble key={i} message={msg} />)}
+        {messages.map((msg, i) => (
+          <MessageBubble
+            key={i}
+            message={msg}
+            onSpeak={voiceSupported && msg.role === 'assistant' ? speakNow : undefined}
+          />
+        ))}
         {isTyping && <TypingIndicator />}
         {sendError && (
           <div className="text-center my-1">

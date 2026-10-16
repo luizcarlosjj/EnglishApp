@@ -10,9 +10,10 @@ interface Props {
   onFinish: () => void
   ttsEnabled?: boolean
   onToggleTTS?: () => void
+  onRestart?: () => void
 }
 
-export function ChatHeader({ scenario, isTyping, ended, onBack, onToggleEngagement, onFinish, ttsEnabled, onToggleTTS }: Props) {
+export function ChatHeader({ scenario, isTyping, ended, onBack, onToggleEngagement, onFinish, ttsEnabled, onToggleTTS, onRestart }: Props) {
   const status = ended ? 'conversa encerrada' : isTyping ? 'digitando…' : 'online'
 
   return (
@@ -51,6 +52,14 @@ export function ChatHeader({ scenario, isTyping, ended, onBack, onToggleEngageme
       <button onClick={onToggleEngagement} className="text-white p-1.5 hover:bg-white/10 rounded-full transition-colors">
         <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
       </button>
+      {onRestart && (
+        <button onClick={onRestart} title="Reiniciar conversa" className="text-white p-1.5 hover:bg-white/10 rounded-full transition-colors">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </button>
+      )}
       {!ended && (
         <button onClick={onFinish} className="text-white text-xs px-2.5 py-1.5 bg-white/20 hover:bg-white/30 rounded-md transition-colors">
           ✓ Terminar
