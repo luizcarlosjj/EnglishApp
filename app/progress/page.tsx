@@ -7,6 +7,7 @@ import { SCENARIOS } from '@/lib/scenarios'
 import { formatDate } from '@/lib/utils'
 import type { Session } from '@/lib/types'
 import { BottomNav } from '@/components/layout/BottomNav'
+import { SessionDetailModal } from '@/components/progress/SessionDetailModal'
 
 function scoreColor(score: number) {
   if (score >= 75) return 'text-green-400'
@@ -40,6 +41,7 @@ export default function ProgressPage() {
   const [sessions, setSessions] = useState<Session[]>([])
   const [fetching, setFetching] = useState(true)
   const [fetchError, setFetchError] = useState('')
+  const [selected, setSelected] = useState<Session | null>(null)
 
   useEffect(() => {
     if (!loading && !user) { router.replace('/login'); return }
@@ -159,7 +161,7 @@ export default function ProgressPage() {
                   const objective = s.evaluation?.objetivo_alcancado
 
                   return (
-                    <div key={s.id} className="bg-wa-dark2 border border-wa-border rounded-xl p-3.5 flex gap-3 items-start">
+                    <div key={s.id} onClick={() => setSelected(s)} className="bg-wa-dark2 border border-wa-border hover:border-wa-green/40 rounded-xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors">
                       {/* Emoji */}
                       <div className="text-2xl leading-none flex-shrink-0 mt-0.5">
                         {sc?.emoji || '💬'}
@@ -183,13 +185,18 @@ export default function ProgressPage() {
                         </div>
                       </div>
 
-                      {/* Score */}
-                      {score != null && (
-                        <div className={`flex-shrink-0 w-11 h-11 rounded-xl border flex flex-col items-center justify-center ${scoreBg(score)}`}>
-                          <span className={`text-base font-bold leading-none ${scoreColor(score)}`}>{score}</span>
-                          <span className={`text-[9px] leading-none mt-0.5 ${scoreColor(score)} opacity-70`}>/100</span>
-                        </div>
-                      )}
+                      {/* Score + chevron */}
+                      <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
+                        {score != null && (
+                          <div className={`w-11 h-11 rounded-xl border flex flex-col items-center justify-center ${scoreBg(score)}`}>
+                            <span className={`text-base font-bold leading-none ${scoreColor(score)}`}>{score}</span>
+                            <span className={`text-[9px] leading-none mt-0.5 ${scoreColor(score)} opacity-70`}>/100</span>
+                          </div>
+                        )}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5 text-wa-sub">
+                          <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
                     </div>
                   )
                 })}
@@ -199,6 +206,7 @@ export default function ProgressPage() {
         )}
       </div>
 
+      {selected && <SessionDetailModal session={selected} onClose={() => setSelected(null)} />}
       <BottomNav active="progress" />
     </div>
   )
