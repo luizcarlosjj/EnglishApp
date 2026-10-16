@@ -8,10 +8,30 @@ import { formatDate } from '@/lib/utils'
 import type { Session } from '@/lib/types'
 import { BottomNav } from '@/components/layout/BottomNav'
 
-const levelColors: Record<string, string> = {
-  beginner: 'bg-green-950 text-green-400',
-  intermediate: 'bg-yellow-950 text-yellow-400',
-  challenging: 'bg-red-950 text-red-400',
+function scoreColor(score: number) {
+  if (score >= 75) return 'text-green-400'
+  if (score >= 50) return 'text-yellow-400'
+  return 'text-red-400'
+}
+
+function scoreBg(score: number) {
+  if (score >= 75) return 'bg-green-950 border-green-800'
+  if (score >= 50) return 'bg-yellow-950 border-yellow-800'
+  return 'bg-red-950 border-red-800'
+}
+
+function fmtDuration(secs: number) {
+  if (!secs) return null
+  const m = Math.floor(secs / 60)
+  return m > 0 ? `${m} min` : `${secs}s`
+}
+
+function fmtTotalTime(secs: number) {
+  if (!secs) return '–'
+  const h = Math.floor(secs / 3600)
+  const m = Math.floor((secs % 3600) / 60)
+  if (h > 0) return `${h}h ${m}min`
+  return `${m} min`
 }
 
 export default function ProgressPage() {
@@ -33,21 +53,44 @@ export default function ProgressPage() {
   const scores = sessions.map(s => s.evaluation?.nota_geral ?? 0).filter(Boolean)
   const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0
   const best = scores.length ? Math.max(...scores) : 0
+  const totalSecs = sessions.reduce((a, s) => a + (s.duration_seconds || 0), 0)
 
-  // SVG chart data
-  const chartPts = scores.slice(0, 20).reverse()
-  const w = 400
-  const h = 100
+  // Chart — last 15 sessions, oldest → newest
+  const chartPts = scores.slice(0, 15).reverse()
 
   function buildChart() {
-    if (chartPts.length < 2) return null
-    const stepX = w / (chartPts.length - 1)
-    const points = chartPts.map((v, i) => `${i * stepX},${h - (v / 100 * h)}`).join(' ')
+    const W = 400, H = 90, PAD = 4
+    const step = chartPts.length > 1 ? (W - PAD * 2) / (chartPts.length - 1) : 0
+    const y = (v: number) => PAD + (H - PAD * 2) * (1 - v / 100)
+    const pts = chartPts.map((v, i) => `${PAD + i * step},${y(v)}`).join(' ')
+
+    // area fill points
+    const areaFirst = `${PAD},${H}`
+    const areaLast = `${PAD + (chartPts.length - 1) * step},${H}`
+    const areaPath = `${areaFirst} ${pts} ${areaLast}`
+
+    // grid lines at 25, 50, 75
+    const gridLines = [25, 50, 75].map(val => ({
+      y: y(val),
+      label: String(val),
+    }))
+
     return (
       <>
-        <polyline points={points} fill="none" stroke="#25D366" strokeWidth="2.5" />
+        {/* grid */}
+        {gridLines.map(g => (
+          <g key={g.label}>
+            <line x1={PAD} y1={g.y} x2={W - PAD} y2={g.y} stroke="#21262D" strokeWidth="1"/>
+            <text x={W - 2} y={g.y + 4} textAnchor="end" fill="#7D8590" fontSize="9">{g.label}</text>
+          </g>
+        ))}
+        {/* area */}
+        <polygon points={areaPath} fill="#2DD4BF" fillOpacity="0.07"/>
+        {/* line */}
+        <polyline points={pts} fill="none" stroke="#2DD4BF" strokeWidth="2" strokeLinejoin="round"/>
+        {/* dots */}
         {chartPts.map((v, i) => (
-          <circle key={i} cx={i * stepX} cy={h - (v / 100 * h)} r={3} fill="#25D366" />
+          <circle key={i} cx={PAD + i * step} cy={y(v)} r="3.5" fill="#2DD4BF" stroke="#161B22" strokeWidth="1.5"/>
         ))}
       </>
     )
@@ -56,85 +99,126 @@ export default function ProgressPage() {
   return (
     <div className="flex flex-col h-full bg-wa-dark">
       {/* Header */}
-      <div className="bg-wa-dark2 border-b border-wa-border px-5 py-4 flex items-center flex-shrink-0">
+      <div className="bg-wa-dark2 border-b border-wa-border px-5 py-4 flex-shrink-0">
         <h1 className="text-xl font-bold">Meu Progresso</h1>
       </div>
 
-      {/* Body */}
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto">
         {fetching && (
-          <div className="text-center text-wa-sub py-10 text-sm">Carregando…</div>
+          <div className="flex items-center justify-center py-20 text-wa-sub text-sm">Carregando…</div>
         )}
         {fetchError && !fetching && (
-          <div className="text-center text-red-400 py-10 text-sm">{fetchError}</div>
+          <div className="text-center text-red-400 py-20 text-sm">{fetchError}</div>
         )}
         {!fetching && !fetchError && sessions.length === 0 && (
-          <div className="text-center py-16 text-wa-sub">
-            <div className="text-4xl mb-3">📭</div>
-            <p className="text-sm">Nenhuma conversa ainda.<br />Conclua um cenário para ver seu progresso aqui!</p>
+          <div className="flex flex-col items-center justify-center py-20 text-wa-sub text-center px-8">
+            <div className="text-5xl mb-4">📭</div>
+            <p className="text-sm leading-relaxed">Nenhuma conversa concluída ainda.<br/>Complete um cenário para ver seu progresso aqui.</p>
           </div>
         )}
+
         {!fetching && !fetchError && sessions.length > 0 && (
-          <>
-            {/* Stats row */}
-            <div className="grid grid-cols-3 gap-2.5 mb-4">
-              <div className="bg-wa-dark2 rounded-xl p-3.5 text-center">
-                <div className="text-2xl font-bold text-wa-green">{sessions.length}</div>
-                <div className="text-xs text-wa-sub mt-1">Conversas</div>
-              </div>
-              <div className="bg-wa-dark2 rounded-xl p-3.5 text-center">
-                <div className="text-2xl font-bold text-wa-green">{avg || '–'}</div>
-                <div className="text-xs text-wa-sub mt-1">Média</div>
-              </div>
-              <div className="bg-wa-dark2 rounded-xl p-3.5 text-center">
-                <div className="text-2xl font-bold text-wa-green">{best || '–'}</div>
-                <div className="text-xs text-wa-sub mt-1">Melhor Nota</div>
-              </div>
+          <div className="p-4 flex flex-col gap-4">
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-3">
+              <StatCard label="Conversas" value={sessions.length} sub="concluídas" />
+              <StatCard label="Tempo total" value={fmtTotalTime(totalSecs)} />
+              <StatCard label="Nota média" value={avg || '–'} sub={avg ? '/100' : undefined}
+                valueClass={avg ? scoreColor(avg) : 'text-wa-sub'} />
+              <StatCard label="Melhor nota" value={best || '–'} sub={best ? '/100' : undefined}
+                valueClass={best ? scoreColor(best) : 'text-wa-sub'} />
             </div>
 
             {/* Chart */}
-            <div className="bg-wa-dark2 rounded-xl p-4 mb-4">
-              <h3 className="text-wa-sub text-sm font-semibold mb-3">Evolução das notas</h3>
-              <svg width="100%" height="100" viewBox="0 0 400 100" preserveAspectRatio="none">
-                {chartPts.length >= 2 ? buildChart() : (
-                  <text x="50%" y="55%" textAnchor="middle" fill="#667781" fontSize="13">
-                    Conclua mais cenários para ver seu gráfico de progresso
-                  </text>
-                )}
-              </svg>
-            </div>
+            {chartPts.length >= 2 && (
+              <div className="bg-wa-dark2 border border-wa-border rounded-xl p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-semibold text-white">Evolução das notas</h3>
+                  <span className="text-xs text-wa-sub">{chartPts.length} sessões</span>
+                </div>
+                <svg width="100%" height="90" viewBox="0 0 400 90" preserveAspectRatio="none">
+                  {buildChart()}
+                </svg>
+                <div className="flex justify-between mt-2 text-[10px] text-wa-sub">
+                  <span>mais antigo</span>
+                  <span>mais recente</span>
+                </div>
+              </div>
+            )}
 
-            {/* History list */}
-            <div className="flex flex-col gap-2">
-              {sessions.map(s => {
-                const sc = SCENARIOS.find(x => x.code === s.scenario_code)
-                const score = s.evaluation?.nota_geral
-                const date = formatDate(s.created_at)
-                const level = s.evaluation?.nivel_estimado || ''
-                const duration = s.duration_seconds ? Math.round(s.duration_seconds / 60) + 'min' : '–'
-                return (
-                  <div key={s.id} className="bg-wa-dark2 rounded-xl p-3.5 hover:bg-wa-dark3 transition-colors">
-                    <div className="flex items-center gap-2.5 mb-1">
-                      <span className="text-[22px]">{sc?.emoji || '💬'}</span>
-                      <span className="font-semibold text-sm flex-1 text-white">{sc?.title || s.scenario_code}</span>
-                      <span className="text-base font-bold text-wa-green">{score || '–'}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-wa-sub">
-                      <span>{date}</span>
-                      {level && (
-                        <span className="bg-wa-dark3 px-1.5 py-0.5 rounded text-[11px]">{level}</span>
+            {/* History */}
+            <div>
+              <h3 className="text-sm font-semibold text-white mb-2.5">Histórico</h3>
+              <div className="flex flex-col gap-2">
+                {sessions.map(s => {
+                  const sc = SCENARIOS.find(x => x.code === s.scenario_code)
+                  const score = s.evaluation?.nota_geral
+                  const dur = fmtDuration(s.duration_seconds)
+                  const date = formatDate(s.created_at)
+                  const objective = s.evaluation?.objetivo_alcancado
+
+                  return (
+                    <div key={s.id} className="bg-wa-dark2 border border-wa-border rounded-xl p-3.5 flex gap-3 items-start">
+                      {/* Emoji */}
+                      <div className="text-2xl leading-none flex-shrink-0 mt-0.5">
+                        {sc?.emoji || '💬'}
+                      </div>
+
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm text-white leading-snug">
+                          {sc?.title_pt || s.scenario_code}
+                        </div>
+                        <div className="text-wa-sub text-[11px] italic mb-1.5">{sc?.title}</div>
+                        <div className="flex items-center gap-2 flex-wrap text-[11px] text-wa-sub">
+                          <span>{date}</span>
+                          {dur && <><span>·</span><span>{dur}</span></>}
+                          {objective !== undefined && (
+                            <><span>·</span>
+                            <span className={objective ? 'text-green-400' : 'text-yellow-500'}>
+                              {objective ? '🎯 objetivo' : '😅 incompleto'}
+                            </span></>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Score */}
+                      {score != null && (
+                        <div className={`flex-shrink-0 w-11 h-11 rounded-xl border flex flex-col items-center justify-center ${scoreBg(score)}`}>
+                          <span className={`text-base font-bold leading-none ${scoreColor(score)}`}>{score}</span>
+                          <span className={`text-[9px] leading-none mt-0.5 ${scoreColor(score)} opacity-70`}>/100</span>
+                        </div>
                       )}
-                      <span>{duration}</span>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
             </div>
-          </>
+          </div>
         )}
       </div>
 
       <BottomNav active="progress" />
+    </div>
+  )
+}
+
+function StatCard({
+  label, value, sub, valueClass = 'text-wa-green',
+}: {
+  label: string
+  value: string | number
+  sub?: string
+  valueClass?: string
+}) {
+  return (
+    <div className="bg-wa-dark2 border border-wa-border rounded-xl p-3.5">
+      <div className="text-xs text-wa-sub mb-1">{label}</div>
+      <div className="flex items-baseline gap-1">
+        <span className={`text-2xl font-bold ${valueClass}`}>{value}</span>
+        {sub && <span className="text-xs text-wa-sub">{sub}</span>}
+      </div>
     </div>
   )
 }
