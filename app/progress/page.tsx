@@ -6,6 +6,7 @@ import { fetchSessions } from '@/lib/api'
 import { SCENARIOS } from '@/lib/scenarios'
 import { formatDate } from '@/lib/utils'
 import type { Session } from '@/lib/types'
+import { BottomNav } from '@/components/layout/BottomNav'
 
 const levelColors: Record<string, string> = {
   beginner: 'bg-green-950 text-green-400',
@@ -55,11 +56,8 @@ export default function ProgressPage() {
   return (
     <div className="flex flex-col h-full bg-wa-dark">
       {/* Header */}
-      <div className="bg-wa-dark2 px-5 py-4 flex items-center gap-3 flex-shrink-0">
-        <button onClick={() => router.push('/scenarios')} className="text-white">
-          <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-        </button>
-        <h1 className="text-lg font-bold flex-1">Meu Progresso</h1>
+      <div className="bg-wa-dark2 border-b border-wa-border px-5 py-4 flex items-center flex-shrink-0">
+        <h1 className="text-xl font-bold">Meu Progresso</h1>
       </div>
 
       {/* Body */}
@@ -136,17 +134,7 @@ export default function ProgressPage() {
         )}
       </div>
 
-      {/* Bottom nav */}
-      <nav className="bg-wa-dark2 border-t border-wa-dark3 flex flex-shrink-0">
-        <button onClick={() => router.push('/scenarios')} className="flex-1 flex flex-col items-center gap-1 py-2.5 text-wa-sub text-xs hover:text-white transition-colors">
-          <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
-          Cenários
-        </button>
-        <button className="flex-1 flex flex-col items-center gap-1 py-2.5 text-wa-green text-xs font-medium">
-          <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-          Progresso
-        </button>
-      </nav>
+      <BottomNav active="progress" />
     </div>
   )
 }

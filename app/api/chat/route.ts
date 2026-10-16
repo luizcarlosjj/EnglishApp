@@ -9,9 +9,38 @@ const VALID_TIERS = new Set(['persona', 'helper', 'evaluator'])
 const MAX_MESSAGES = 100
 const MAX_CONTENT_LENGTH = 10_000
 
+// Per-user rate limiting: 30 requests/minute (in-memory, per-instance)
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT = 30
+const RATE_WINDOW_MS = 60_000
+
+function checkRateLimit(userId: string): boolean {
+  const now = Date.now()
+  const entry = rateLimitMap.get(userId)
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(userId, { count: 1, resetAt: now + RATE_WINDOW_MS })
+    return true
+  }
+  if (entry.count >= RATE_LIMIT) return false
+  entry.count++
+  return true
+}
+
+// Periodically clean up expired entries to avoid memory leaks
+if (rateLimitMap.size > 500) {
+  const now = Date.now()
+  for (const [key, val] of rateLimitMap) {
+    if (now > val.resetAt) rateLimitMap.delete(key)
+  }
+}
+
 export async function POST(request: Request) {
   const { user, error: authError } = await requireAuth(request)
   if (!user) return authError!
+
+  if (!checkRateLimit(user.id)) {
+    return NextResponse.json({ error: 'Rate limit exceeded. Wait a moment.' }, { status: 429 })
+  }
 
   const body = await request.json().catch(() => null)
   if (!body) return NextResponse.json({ error: 'Invalid body' }, { status: 400 })

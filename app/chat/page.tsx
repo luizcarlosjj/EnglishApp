@@ -76,7 +76,7 @@ export default function ChatPage() {
       {engagementVisible && <EngagementBar value={engagement} />}
       <div className="flex-1 overflow-y-auto bg-wa-bg px-2.5 py-3 flex flex-col">
         <div className="text-center my-2">
-          <span className="bg-white/80 text-[#555] text-xs px-2.5 py-1 rounded-lg">{formatChatDate()}</span>
+          <span className="bg-wa-dark3/80 text-wa-sub text-xs px-2.5 py-1 rounded-lg">{formatChatDate()}</span>
         </div>
         <BriefBanner scenario={scenario} />
         {messages.map((msg, i) => <MessageBubble key={i} message={msg} />)}

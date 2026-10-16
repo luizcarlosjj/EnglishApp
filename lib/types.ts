@@ -13,8 +13,10 @@ export interface Scenario {
   level: 'beginner' | 'intermediate' | 'challenging'
   cefr: string
   title: string
+  title_pt: string
   emoji: string
   brief: string
+  brief_pt: string
   goal: string
   persona: Persona
   relationship: string

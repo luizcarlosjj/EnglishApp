@@ -22,8 +22,9 @@ export function BriefModal({ scenario: s, onStart, onClose }: Props) {
     >
       <div className="bg-wa-dark2 rounded-t-2xl w-full max-w-lg p-5 pb-8" style={{ animation: 'slideUp 0.25s ease' }}>
         <div className="text-center text-5xl mb-2">{s.emoji}</div>
-        <h2 className="font-bold text-lg text-white mb-1">{s.title}</h2>
-        <p className="text-wa-sub text-sm mb-3 leading-relaxed">{s.brief}</p>
+        <h2 className="font-bold text-lg text-white mb-0.5">{s.title_pt}</h2>
+        <p className="text-wa-sub text-xs italic mb-2">{s.title}</p>
+        <p className="text-[#bbb] text-sm mb-3 leading-relaxed">{s.brief_pt}</p>
         <div className="bg-wa-dark3 rounded-lg px-3 py-2.5 text-sm text-[#ccc] mb-3">
           <strong className="text-wa-green">Seu objetivo:</strong> {s.goal}
         </div>

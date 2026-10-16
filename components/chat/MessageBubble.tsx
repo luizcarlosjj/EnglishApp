@@ -19,8 +19,8 @@ export function MessageBubble({ message }: { message: Message }) {
       <div
         className={`max-w-[75%] px-2.5 py-1.5 text-sm leading-relaxed break-words ${
           isSent
-            ? 'bg-wa-sent text-[#111] rounded-lg rounded-tr-none'
-            : 'bg-white text-[#111] rounded-lg rounded-tl-none'
+            ? 'bg-wa-sent text-[#c8eaf4] rounded-lg rounded-tr-none'
+            : 'bg-wa-dark3 text-[#E6EDF3] rounded-lg rounded-tl-none'
         }`}
       >
         <span className="whitespace-pre-wrap break-words">{message.content}</span>

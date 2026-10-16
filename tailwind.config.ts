@@ -13,17 +13,17 @@ const config: Config = {
     extend: {
       colors: {
         wa: {
-          dark:   '#111B21',
-          dark2:  '#1F2C34',
-          dark3:  '#2A3942',
-          header: '#075E54',
-          green:  '#25D366',
-          teal:   '#128C7E',
-          bg:     '#ECE5DD',
-          sent:   '#DCF8C6',
-          blue:   '#53BDEB',
-          sub:    '#667781',
-          border: '#e9edef',
+          dark:   '#0D1117',
+          dark2:  '#161B22',
+          dark3:  '#21262D',
+          header: '#161B22',
+          green:  '#2DD4BF',
+          teal:   '#0891B2',
+          bg:     '#111720',
+          sent:   '#143040',
+          blue:   '#60A5FA',
+          sub:    '#7D8590',
+          border: '#30363D',
         }
       }
     }

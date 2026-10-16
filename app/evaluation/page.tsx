@@ -220,7 +220,7 @@ export default function EvaluationPage() {
               ) : (
                 <div className="flex flex-col gap-1.5 items-end">
                   {evaluation.conversa_ideal.split('|||').map((m, i) => m.trim()).filter(Boolean).map((m, i) => (
-                    <div key={i} className="bg-wa-sent text-[#111] rounded-lg rounded-tr-none px-3 py-2 text-sm max-w-[85%]">
+                    <div key={i} className="bg-wa-sent text-[#c8eaf4] rounded-lg rounded-tr-none px-3 py-2 text-sm max-w-[85%]">
                       {m}
                     </div>
                   ))}

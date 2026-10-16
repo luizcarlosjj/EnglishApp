@@ -10,6 +10,8 @@ interface AuthContextValue {
   loading: boolean
   signIn: (email: string, password: string) => Promise<string | null>
   signOut: () => Promise<void>
+  changePassword: (newPassword: string) => Promise<string | null>
+  updateDisplayName: (name: string) => Promise<string | null>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -42,8 +44,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut()
   }
 
+  async function changePassword(newPassword: string): Promise<string | null> {
+    if (newPassword.length < 8) return 'A senha precisa ter pelo menos 8 caracteres.'
+    const { error } = await supabase.auth.updateUser({ password: newPassword })
+    return error?.message ?? null
+  }
+
+  async function updateDisplayName(name: string): Promise<string | null> {
+    const { error } = await supabase.auth.updateUser({ data: { display_name: name.trim() } })
+    return error?.message ?? null
+  }
+
   return (
-    <AuthContext.Provider value={{ supabase, user, token, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ supabase, user, token, loading, signIn, signOut, changePassword, updateDisplayName }}>
       {children}
     </AuthContext.Provider>
   )

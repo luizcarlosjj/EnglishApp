@@ -4,8 +4,9 @@ export const SCENARIOS: Scenario[] = [
   // WORK
   {
     code: 'WORK_01', category: 'work', level: 'beginner', cefr: 'B1',
-    title: 'Recruiter Outreach', emoji: '💼',
+    title: 'Recruiter Outreach', title_pt: 'Abordagem de Recrutador', emoji: '💼',
     brief: 'Maya Chen, a tech recruiter in San Francisco, found your LinkedIn and is reaching out about a backend engineering role at her startup.',
+    brief_pt: 'Maya Chen, recrutadora tech em San Francisco, encontrou seu LinkedIn e está entrando em contato sobre uma vaga de backend numa startup.',
     goal: 'Schedule a 30-minute screening call and make a good first impression.',
     persona: { name: 'Maya Chen', origin: 'American (San Francisco)', age: 29, role: 'Tech Recruiter at TechFlow',
       personality: 'Upbeat, professional but relaxed, uses emoji occasionally',
@@ -24,8 +25,9 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     code: 'WORK_02', category: 'work', level: 'intermediate', cefr: 'B2',
-    title: 'Culture Fit Interview', emoji: '🤝',
+    title: 'Culture Fit Interview', title_pt: 'Entrevista de Fit Cultural', emoji: '🤝',
     brief: 'Sofia Andersson, HR manager at a Swedish tech company, wants a casual WhatsApp chat about your work style and values before the final round.',
+    brief_pt: 'Sofia Andersson, gerente de RH numa empresa sueca, quer um bate-papo casual sobre seu estilo de trabalho e valores antes da rodada final.',
     goal: 'Make a strong impression by discussing your work style, teamwork, and interest in the company.',
     persona: { name: 'Sofia Andersson', origin: 'Swedish (Stockholm)', age: 34, role: 'HR Manager at NordTech',
       personality: 'Warm, direct, values authenticity',
@@ -44,8 +46,9 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     code: 'WORK_03', category: 'work', level: 'challenging', cefr: 'C1',
-    title: 'Technical Interview Debrief', emoji: '⚙️',
+    title: 'Technical Interview Debrief', title_pt: 'Debriefing de Entrevista Técnica', emoji: '⚙️',
     brief: "James O'Brien, a staff engineer at a Dublin fintech, messages after your technical interview to dig deeper into your system design decisions.",
+    brief_pt: "James O'Brien, engenheiro sênior numa fintech de Dublin, manda mensagem após sua entrevista técnica para aprofundar suas decisões de design de sistema.",
     goal: 'Defend your technical choices clearly, show awareness of trade-offs, and demonstrate seniority.',
     persona: { name: "James O'Brien", origin: 'Irish (Dublin)', age: 41, role: 'Staff Engineer at FinCore',
       personality: 'Blunt, technically sharp, respects confidence. Dislikes vague answers. Dry humour.',
@@ -66,8 +69,9 @@ export const SCENARIOS: Scenario[] = [
   // TRAVEL
   {
     code: 'TRVL_01', category: 'travel', level: 'beginner', cefr: 'A2/B1',
-    title: 'Hotel Check-in Problem', emoji: '🏨',
+    title: 'Hotel Check-in Problem', title_pt: 'Problema no Check-in do Hotel', emoji: '🏨',
     brief: "You arrive at your hotel in London and Tom, the receptionist, messages via the hotel's WhatsApp to say there's an issue with your room.",
+    brief_pt: "Você chega no hotel em Londres e Tom, o recepcionista, te manda mensagem pelo WhatsApp do hotel dizendo que há um problema com o seu quarto.",
     goal: 'Understand the problem, negotiate a solution (upgrade, discount, or different room), and confirm the resolution.',
     persona: { name: 'Tom Higgins', origin: 'British (London)', age: 25, role: 'Hotel Receptionist at The Grove',
       personality: 'Polite, apologetic, helpful but limited options',
@@ -86,8 +90,9 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     code: 'TRVL_02', category: 'travel', level: 'intermediate', cefr: 'B1/B2',
-    title: 'Airbnb Host Local Tips', emoji: '🏡',
+    title: 'Airbnb Host Local Tips', title_pt: 'Dicas Locais do Anfitrião', emoji: '🏡',
     brief: "You're staying at an Airbnb in Porto, Portugal. Your host Carlos messages after check-in and offers local recommendations.",
+    brief_pt: "Você está hospedado num Airbnb no Porto, Portugal. Seu anfitrião Carlos manda mensagem após o check-in e oferece dicas locais.",
     goal: "Have a natural conversation, get restaurant and activity recommendations, and confirm plans.",
     persona: { name: 'Carlos Ferreira', origin: 'Portuguese (Porto, non-native English)', age: 38, role: 'Airbnb host',
       personality: "Warm, proud of his city, eager to share. English is good but imperfect.",
@@ -106,8 +111,9 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     code: 'TRVL_03', category: 'travel', level: 'challenging', cefr: 'B2/C1',
-    title: 'Flight Delay — Airline Support', emoji: '✈️',
+    title: 'Flight Delay — Airline Support', title_pt: 'Atraso de Voo — Suporte da Companhia', emoji: '✈️',
     brief: "Your Amsterdam → New York flight was delayed 6 hours. You're chatting with airline support agent Claire via WhatsApp.",
+    brief_pt: "Seu voo Amsterdã → Nova York atrasou 6 horas. Você está no chat com Claire, agente de suporte da companhia aérea.",
     goal: 'Claim EU261 passenger rights, get meal vouchers and compensation information, find rebooking options.',
     persona: { name: 'Claire', origin: 'American (airline support center)', age: 32, role: 'Customer Support Agent at SkyLink',
       personality: 'Professional, scripted, limited decision-making power',
@@ -125,8 +131,9 @@ export const SCENARIOS: Scenario[] = [
   // DAY TO DAY
   {
     code: 'DAY_01', category: 'day', level: 'beginner', cefr: 'A2/B1',
-    title: 'New Coworker Introduction', emoji: '👋',
+    title: 'New Coworker Introduction', title_pt: 'Conhecendo um Colega Novo', emoji: '👋',
     brief: "Sam, your new American coworker who joined remotely this week, messages you to introduce themselves.",
+    brief_pt: "Sam, seu novo colega americano que entrou remotamente essa semana, te manda mensagem para se apresentar.",
     goal: "Have a friendly introductory exchange, share a bit about yourself, and make a plan to chat more.",
     persona: { name: 'Sam Taylor', origin: 'American (Chicago)', age: 27, role: 'Junior Product Manager (remote)',
       personality: "Friendly, a bit nervous in new situations, enthusiastic about movies and coffee",
@@ -145,8 +152,9 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     code: 'DAY_02', category: 'day', level: 'intermediate', cefr: 'B1/B2',
-    title: 'Weekend Plans with a Friend', emoji: '🎉',
+    title: 'Weekend Plans with a Friend', title_pt: 'Planos de Fim de Semana', emoji: '🎉',
     brief: "Your British friend Alex texts you to make weekend plans. They're thinking of hiking but are open to other ideas.",
+    brief_pt: "Seu amigo britânico Alex te manda mensagem para combinar os planos do fim de semana. Ele está pensando em fazer uma trilha, mas está aberto a outras ideias.",
     goal: "Negotiate a weekend activity you both enjoy and agree on logistics (time, meeting point, what to bring).",
     persona: { name: 'Alex Murphy', origin: 'British (Manchester)', age: 30, role: 'Friend (graphic designer)',
       personality: "Easy-going, a bit indecisive. Into hiking, photography, live music.",
@@ -165,8 +173,9 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     code: 'DAY_03', category: 'day', level: 'challenging', cefr: 'B2/C1',
-    title: 'Sports Debate with a Friend', emoji: '⚽',
+    title: 'Sports Debate with a Friend', title_pt: 'Debate Esportivo com Amigo', emoji: '⚽',
     brief: "Your Australian friend Jordan, a passionate football fan, messages after a Champions League match to debate what happened.",
+    brief_pt: "Seu amigo australiano Jordan, fã fanático de futebol, te manda mensagem após um jogo da Champions League para debater o que aconteceu.",
     goal: "Hold a natural, opinionated conversation — agree, disagree, push back — without sounding stilted.",
     persona: { name: 'Jordan Blake', origin: 'Australian (Melbourne)', age: 26, role: 'Friend (sports journalist)',
       personality: "Loud, passionate, loves banter. Strong opinions but takes a joke.",
@@ -187,8 +196,9 @@ export const SCENARIOS: Scenario[] = [
   // SOCIAL
   {
     code: 'SOC_01', category: 'social', level: 'intermediate', cefr: 'B1/B2',
-    title: 'Catching Up with a Friend Abroad', emoji: '🌍',
+    title: 'Catching Up with a Friend Abroad', title_pt: 'Colocando o Papo em Dia', emoji: '🌍',
     brief: "Your old university friend Emma, who moved to Toronto 2 years ago, texts you out of the blue to catch up.",
+    brief_pt: "Emma, sua velha amiga de faculdade que foi morar em Toronto há 2 anos, te manda mensagem do nada para colocar o papo em dia.",
     goal: "Have a natural catch-up conversation — share what you've been up to, ask about her life, and make a plan to video call.",
     persona: { name: 'Emma Wilson', origin: 'British (originally), now in Toronto', age: 28, role: 'Friend (UX designer)',
       personality: "Warm, slightly nostalgic, curious. Mixes British and Canadian expressions.",
