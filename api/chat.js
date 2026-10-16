@@ -1,11 +1,11 @@
 import OpenAI from 'openai';
-import { createClient } from '@supabase/supabase-js';
+import { requireAuth } from './_lib/auth.js';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+
+const VALID_TIERS = new Set(['persona', 'helper', 'evaluator']);
+const MAX_MESSAGES = 100;
+const MAX_CONTENT_LENGTH = 10_000;
 
 function mergeConsecutiveRoles(messages) {
   const result = [];
@@ -28,31 +28,38 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
-  const token = req.headers.authorization?.replace('Bearer ', '');
-  if (!token) return res.status(401).json({ error: 'Unauthorized' });
-
-  const { data: { user }, error } = await supabase.auth.getUser(token);
-  if (error || !user) return res.status(401).json({ error: 'Unauthorized' });
+  const user = await requireAuth(req, res);
+  if (!user) return;
 
   const { tier, messages } = req.body;
-  if (!tier || !messages) return res.status(400).json({ error: 'Missing tier or messages' });
+
+  if (!VALID_TIERS.has(tier)) {
+    return res.status(400).json({ error: 'Invalid tier' });
+  }
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return res.status(400).json({ error: 'Invalid messages' });
+  }
+  if (messages.length > MAX_MESSAGES) {
+    return res.status(400).json({ error: 'Too many messages' });
+  }
+  if (messages.some(m => typeof m?.role !== 'string' || typeof m?.content !== 'string' || m.content.length > MAX_CONTENT_LENGTH)) {
+    return res.status(400).json({ error: 'Invalid message format or content too long' });
+  }
 
   const model = tier === 'evaluator' ? 'gpt-4o' : 'gpt-4o-mini';
   const maxTokens = tier === 'evaluator' ? 2500 : 600;
   const temperature = tier === 'evaluator' ? 0.3 : 0.85;
 
-  const normalized = mergeConsecutiveRoles(messages);
-
   try {
     const completion = await openai.chat.completions.create({
       model,
-      messages: normalized,
+      messages: mergeConsecutiveRoles(messages),
       max_tokens: maxTokens,
       temperature,
     });
     res.json({ content: completion.choices[0].message.content });
   } catch (e) {
     console.error('OpenAI error:', e.message);
-    res.status(500).json({ error: 'AI error', details: e.message });
+    res.status(500).json({ error: 'AI service unavailable' });
   }
 }

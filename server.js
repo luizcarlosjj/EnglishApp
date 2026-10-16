@@ -7,7 +7,7 @@ import configHandler from './api/config.js';
 config();
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: '50kb' }));
 app.use(express.static('public'));
 
 app.get('/api/config', configHandler);
