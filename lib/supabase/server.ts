@@ -20,3 +20,19 @@ export async function requireAuth(request: Request) {
   }
   return { user, supabase, error: null }
 }
+
+export async function requireAdmin(request: Request) {
+  const { user, supabase, error } = await requireAuth(request)
+  if (!user) return { user: null, supabase: null, error }
+  if (!user.app_metadata?.is_admin) {
+    return { user: null, supabase: null, error: NextResponse.json({ error: 'Forbidden' }, { status: 403 }) }
+  }
+  return { user, supabase: supabase!, error: null }
+}
+
+export function getAdminClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}

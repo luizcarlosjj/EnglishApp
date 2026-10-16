@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { BottomNav } from '@/components/layout/BottomNav'
+import { AdminInvites } from '@/components/profile/AdminInvites'
 
 type Tab = 'account' | 'preferences' | 'admin'
 
@@ -226,9 +227,11 @@ export default function ProfilePage() {
 
         {/* ── ADMIN ── */}
         {tab === 'admin' && isAdmin && (
+          <>
+          <AdminInvites token={token!} />
           <section className="bg-wa-dark2 border border-wa-border rounded-xl p-4">
-            <h2 className="text-sm font-semibold text-white mb-1">Criar novo usuário</h2>
-            <p className="text-xs text-wa-sub mb-4">O usuário recebe acesso imediato com o email e senha definidos aqui.</p>
+            <h2 className="text-sm font-semibold text-white mb-1">Criar usuário direto</h2>
+            <p className="text-xs text-wa-sub mb-4">Cria a conta imediatamente, sem link. Você define o email e senha.</p>
             <form onSubmit={handleCreateUser} className="flex flex-col gap-3">
               <input type="text" value={newUserName} onChange={e => setNewUserName(e.target.value)}
                 placeholder="Nome (opcional)" maxLength={60}
@@ -254,6 +257,7 @@ export default function ProfilePage() {
               </div>
             )}
           </section>
+          </>
         )}
       </div>
 
