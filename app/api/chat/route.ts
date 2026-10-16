@@ -6,8 +6,8 @@ import { mergeConsecutiveRoles } from '@/lib/utils'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 const VALID_TIERS = new Set(['persona', 'helper', 'evaluator'])
-const MAX_MESSAGES = 100
-const MAX_CONTENT_LENGTH = 10_000
+const MAX_MESSAGES = 30           // cap conversations at 30 msgs
+const MAX_CONTENT_LENGTH = 6_000  // tighter limit to reduce token abuse
 
 // Per-user rate limiting: 30 requests/minute (in-memory, per-instance)
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
@@ -54,8 +54,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid message format' }, { status: 400 })
   }
 
-  const model = tier === 'evaluator' ? 'gpt-4o' : 'gpt-4o-mini'
-  const maxTokens = tier === 'evaluator' ? 2500 : 600
+  const model = 'gpt-4o-mini'
+  const maxTokens = tier === 'evaluator' ? 1800 : tier === 'helper' ? 300 : 250
   const temperature = tier === 'evaluator' ? 0.3 : 0.85
 
   try {

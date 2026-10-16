@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { useChatStore } from '@/hooks/useChat'
+import { useVoice } from '@/hooks/useVoice'
 import { ChatHeader } from '@/components/chat/ChatHeader'
 import { EngagementBar } from '@/components/chat/EngagementBar'
 import { MessageBubble } from '@/components/chat/MessageBubble'
@@ -22,10 +23,13 @@ export default function ChatPage() {
     addUserMessage, processPersonaReply, sendPersonaOpening, endConversation, incrementHelp,
   } = useChatStore()
 
+  const { isListening, ttsEnabled, startListening, stopListening, speak, stopSpeaking, toggleTTS, supported: voiceSupported } = useVoice()
+
   const [showHelp, setShowHelp] = useState(false)
   const [sendError, setSendError] = useState('')
   const initialized = useRef(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const spokenCountRef = useRef(0)
 
   useEffect(() => {
     if (!scenario) { router.replace('/scenarios'); return }
@@ -41,6 +45,19 @@ export default function ChatPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isTyping])
 
+  useEffect(() => {
+    if (!ttsEnabled) return
+    const personaMsgs = messages.filter(m => m.role === 'assistant')
+    if (personaMsgs.length > spokenCountRef.current) {
+      spokenCountRef.current = personaMsgs.length
+      speak(personaMsgs[personaMsgs.length - 1].content)
+    }
+  }, [messages, ttsEnabled, speak])
+
+  useEffect(() => {
+    if (!ttsEnabled) stopSpeaking()
+  }, [ttsEnabled, stopSpeaking])
+
   async function handleSend() {
     const text = inputValue.trim()
     if (!text || ended) return
@@ -51,6 +68,17 @@ export default function ChatPage() {
       await processPersonaReply(token!)
     } catch {
       setSendError('⚠️ Erro de conexão. Verifique sua internet e tente novamente.')
+    }
+  }
+
+  function handleMicToggle() {
+    if (isListening) {
+      stopListening()
+    } else {
+      startListening((text) => {
+        const current = useChatStore.getState().inputValue
+        setInputValue(current ? current + ' ' + text : text)
+      })
     }
   }
 
@@ -72,6 +100,8 @@ export default function ChatPage() {
         onBack={handleBack}
         onToggleEngagement={() => setEngagementVisible(!engagementVisible)}
         onFinish={() => { endConversation(); router.push('/evaluation') }}
+        ttsEnabled={ttsEnabled}
+        onToggleTTS={voiceSupported ? toggleTTS : undefined}
       />
       {engagementVisible && <EngagementBar value={engagement} />}
       <div className="flex-1 overflow-y-auto bg-wa-bg px-2.5 py-3 flex flex-col">
@@ -97,6 +127,9 @@ export default function ChatPage() {
           onSend={handleSend}
           onHelp={() => setShowHelp(true)}
           disabled={isTyping}
+          showMic={voiceSupported}
+          isListening={isListening}
+          onMicToggle={handleMicToggle}
         />
       )}
       {showHelp && (

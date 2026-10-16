@@ -8,9 +8,11 @@ interface Props {
   onBack: () => void
   onToggleEngagement: () => void
   onFinish: () => void
+  ttsEnabled?: boolean
+  onToggleTTS?: () => void
 }
 
-export function ChatHeader({ scenario, isTyping, ended, onBack, onToggleEngagement, onFinish }: Props) {
+export function ChatHeader({ scenario, isTyping, ended, onBack, onToggleEngagement, onFinish, ttsEnabled, onToggleTTS }: Props) {
   const status = ended ? 'conversa encerrada' : isTyping ? 'digitando…' : 'online'
 
   return (
@@ -25,6 +27,27 @@ export function ChatHeader({ scenario, isTyping, ended, onBack, onToggleEngageme
         <div className="text-white font-semibold text-base leading-tight">{scenario.persona.name}</div>
         <div className="text-white/70 text-xs">{status}</div>
       </div>
+      {onToggleTTS && (
+        <button
+          onClick={onToggleTTS}
+          title={ttsEnabled ? 'Desativar leitura em voz alta' : 'Ativar leitura em voz alta'}
+          className={`p-1.5 rounded-full transition-colors ${ttsEnabled ? 'text-wa-green bg-wa-green/20' : 'text-white hover:bg-white/10'}`}
+        >
+          {ttsEnabled ? (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <line x1="23" y1="9" x2="17" y2="15"/>
+              <line x1="17" y1="9" x2="23" y2="15"/>
+            </svg>
+          )}
+        </button>
+      )}
       <button onClick={onToggleEngagement} className="text-white p-1.5 hover:bg-white/10 rounded-full transition-colors">
         <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
       </button>

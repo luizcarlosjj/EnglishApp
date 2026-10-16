@@ -78,9 +78,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const state = get()
     const s = state.scenario!
     const systemPrompt = buildPersonaPrompt(s, state.engagement)
+    const WINDOW = 12
+    const recentMessages = state.messages.slice(-WINDOW)
     const apiMessages = [
       { role: 'system', content: systemPrompt },
-      ...state.messages.map(m => ({ role: m.role, content: m.content }))
+      ...recentMessages.map(m => ({ role: m.role, content: m.content }))
     ]
 
     let rawText: string
